@@ -1,7 +1,7 @@
 import serial
 import time
-import json
 import rtmidi
+from midi2txtNumbers import process_midi_file
 
 arduino = serial.Serial("COM5", 9600)
 
@@ -15,14 +15,22 @@ midiNumbersPressed = []
 
 # OFFSET_TRANSPOSE = 12
 # OFFSET_BASE = 4
-OFFSET = -2
+# OFFSET = -2
+OFFSET = -14
 
 # midiNumbersFilename = "C418Sweden_NotesNumbers.txt"
-midiNumbersFilename = "alle_meine_entchen_NotesNumbers.txt"
+# midiNumbersFilename = "alle_meine_entchen_NotesNumbers.txt"
+midiNumbersFilename = "USER_SELECT"
+data = process_midi_file(midiNumbersFilename,True)
 
 
 def main():
-    while therIsMoreToSend():
+    while True:
+
+        if not therIsMoreToSend():
+            print("Finsihed so restarting")
+            resetIndexMoreToSend()
+
         clearAllLEDs()
         sendCurrentData()
         print(numbersToSend)
@@ -58,49 +66,20 @@ def main():
                         print("MATCH")
                         break
 
-                    # numberToSend = round(midiNumber * 1.95) - 58
-                    # arduino.write(bytes([numberToSend]))
-
-
-def readMidiNumbersFromFile(filename):
-    with open(filename, "r") as infile:
-        data = infile.read()
-        midi_numbers_list = json.loads(data)
-    return midi_numbers_list
-
-
-# data = [[3,7,4],[8,5,6],[1,4,5],[3,7,4],[8,5,6],[1,4,5],[3,7,4],[8,5,6],[1,4,5]]
-# data = [range(1, 144, 1)]
-data = readMidiNumbersFromFile(midiNumbersFilename)
-
-
-# print(dataOG)
-
-
-# def change(data):
-#     result = []
-#     for row in data:
-#         new_row = [round(num * 1.95) - 32 for num in row]
-#         result.append(new_row)
-#     return result
-
-
-# print(f"##########Multiplying by 2########")
-
-# data = change(dataOG)
-# print(data)
-
 
 dataIndex = 0
-
 numberIndex = 0
-
 CLEAR_ALL_LEDs = b"\x00"
-
 SEND_AGAIN = b"\x00"
 SEND_NEXT = b"\x01"
 RECEIVED_COMMAND = b"\x02"
 
+
+def resetIndexMoreToSend():
+    global dataIndex
+    global numberIndex
+    dataIndex = 0
+    numberIndex = 0
 
 def therIsMoreToSend():
     return dataIndex < len(data)
@@ -146,7 +125,6 @@ def setupNext():
 
 def sendNumber():
     numberToSend = numbersToSend[numberIndex]
-    # new_row = [round(num * 1.95) - 32 for num in row]
     numberToSend = round(numberToSend * 1.95) - 32
     arduino.write(bytes([numberToSend]))
     print(f"Sent: {numberToSend}")
@@ -161,19 +139,7 @@ if __name__ == "__main__":
     main()
 
 ##############
-############
-############
-############
-############
-############
-############
-############
-############
-############
-############
-############
-############
-############
-############
-############
-############
+##############
+##############
+##############
+##############
