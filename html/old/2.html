@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthesia-like Visualization</title>
+    <script src="notes.js"></script>
+    <style>
+        body {
+            margin: 0;
+            background-color: #111;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="visualizer"></canvas>
+    <script>
+
+        const canvas = document.getElementById("visualizer");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        // Function to normalize velocity to height
+        const normalize = (value, min, max) => (value - min) / (max - min);
+        // Colors for notes
+        const getColor = (velocity) => `hsl(${velocity * 2}, 100%, 50%)`;
+        // Render loop
+        const renderNotes = (noteList) => {
+            const startTime = Date.now();
+            const noteWidth = canvas.width / noteList.length;
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const elapsed = (Date.now() - startTime) / 1000; // seconds
+                noteList.forEach((note, index) => {
+                    const yPos = canvas.height - elapsed * 100 - index * 20; // Dynamic movement
+                    const height = normalize(note.velocity, 0, 127) * 200;
+                    const color = getColor(note.velocity);
+                    if (yPos > 0) {
+                        ctx.fillStyle = color;
+                        ctx.fillRect(
+                            index * noteWidth + 10,
+                            yPos,
+                            noteWidth - 20,
+                            height
+                        );
+                    }
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        };
+        renderNotes(notes);
+    </script>
+</body>
+</html>

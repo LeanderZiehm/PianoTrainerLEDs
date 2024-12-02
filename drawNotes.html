@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="ErikSatieGymnopedieNo.1.js"></script>
+  <title>Rectangles from Divs</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      overflow: auto;
+    }
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      /* overflow: hidden; */
+    }
+    .rectangle {
+      position: absolute;
+      background-color: rgba(0, 123, 255, 0.6);
+      border: 2px solid #007bff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container"></div>
+  <script>
+    const container = document.getElementById('container');
+    notes.forEach(note => {
+      const scaleY = 1/10;
+      const scaleX = 10;
+
+      const x = note.note * scaleX;
+      // const x =  note.time * scaleX;
+      const y = note.time * scaleY;
+      // const y = note.note * scaleY;
+      const width = 20;
+      // const width = note.duration * scaleY;
+      const height = note.duration * scaleY;
+      // const height = 20;
+
+      const rectangle = document.createElement('div');
+      rectangle.classList.add('rectangle');
+      rectangle.style.left = `${x}px`;
+      rectangle.style.top = `${y}px`;
+      rectangle.style.width = `${width}px`;
+      rectangle.style.height = `${height}px`;
+      container.appendChild(rectangle);
+    });
+  </script>
+</body>
+</html>

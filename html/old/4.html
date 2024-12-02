@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Visualization</title>
+    <style>
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center;">MIDI Visualization</h1>
+    <canvas id="midiCanvas"></canvas>
+    <script>
+        // MIDI data (note, time, velocity)
+        const notes = [
+            { "note": 81, "time": 0, "velocity": 90 },
+            { "note": 93, "time": 0, "velocity": 89 },
+            { "note": 69, "time": 0, "velocity": 89 },
+            { "note": 81, "time": 15, "velocity": 0 },
+            { "note": 93, "time": 15, "velocity": 0 },
+            { "note": 69, "time": 15, "velocity": 0 }
+        ];
+        // Configuration
+        const noteMin = 21; // Lowest note
+        const noteMax = 108; // Highest note
+        const imageWidth = 1000; // Canvas width
+        const noteHeight = 10; // Height of a note
+        const timeScale = 10; // Scale factor for time
+        const noteWidth = 5; // Width of a note
+        const imageHeight = (noteMax - noteMin + 1) * noteHeight; // Canvas height
+        // Setup canvas
+        const canvas = document.getElementById('midiCanvas');
+        canvas.width = imageWidth;
+        canvas.height = imageHeight;
+        const ctx = canvas.getContext('2d');
+        // Background
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Draw notes
+        notes.forEach(({ note, time, velocity }) => {
+            if (noteMin <= note && note <= noteMax && velocity > 0) {
+                const x = Math.floor(time * timeScale);
+                const y = (noteMax - note) * noteHeight;
+                ctx.fillStyle = "white"; // Active note color
+                ctx.fillRect(x, y, noteWidth, noteHeight);
+            }
+        });
+    </script>
+</body>
+</html>

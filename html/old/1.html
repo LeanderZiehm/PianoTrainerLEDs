@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piano Notes Viewer</title>
+  <script src="notes.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .piano-container {
+      width: 100px;
+      height: 100%;
+      overflow-y: auto;
+      background: #000;
+      border: 2px solid #444;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+    .note {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 12px;
+      margin: 2px 0;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div class="piano-container" id="pianoContainer">
+  </div>
+  <script>
+    function main(){
+          const pianoContainer = document.getElementById('pianoContainer');
+      // Add notes to the container
+      notes.forEach(note => {
+        const noteElement = document.createElement('div');
+        noteElement.classList.add('note');
+        noteElement.textContent = `Time: ${note.time}, Vel: ${note.velocity}`;
+        noteElement.style.height = `${note.velocity}px`;
+        noteElement.style.backgroundColor = `rgba(255, 100, 100, ${note.velocity / 100})`;
+        pianoContainer.appendChild(noteElement);
+      });
+
+    }
+
+    document.addEventListener('DOMContentLoaded', main);
+
+  </script>
+</body>
+</html>

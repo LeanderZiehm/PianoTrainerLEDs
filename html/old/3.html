@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Visualization</title>
+    <style>
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center;">MIDI Visualization</h1>
+    <canvas id="midiCanvas"></canvas>
+    <script>
+        // Configuration (adjust based on your MIDI file data)
+        const noteMin = 21; // Lowest note (inclusive)
+        const noteMax = 108; // Highest note (inclusive)
+        const imageWidth = 10000; // Width of the canvas
+        const noteHeight = 10; // Height per note
+        const timeScale = 1; // Adjust the time scale for granularity
+        // Simulated MIDI notes (replace this with actual parsed MIDI data)
+        const notes = [
+            // Array of [note, startTime]
+            [60, 100], [62, 200], [64, 300], [65, 400], [67, 500], [69, 600], [71, 700], [72, 800]
+        ];
+        // Compute canvas height based on notes
+        const imageHeight = (noteMax - noteMin + 1) * noteHeight;
+        // Setup canvas
+        const canvas = document.getElementById('midiCanvas');
+        canvas.width = imageWidth;
+        canvas.height = imageHeight;
+        const ctx = canvas.getContext('2d');
+        // Background
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Draw notes
+        notes.forEach(([note, startTime]) => {
+            if (noteMin <= note && note <= noteMax) {
+                const x = Math.floor(startTime / timeScale);
+                const y = (noteMax - note) * noteHeight;
+                ctx.fillStyle = "white";
+                ctx.fillRect(x, y, 10, noteHeight); // Rectangle dimensions (x, y, width, height)
+            }
+        });
+    </script>
+</body>
+</html>
